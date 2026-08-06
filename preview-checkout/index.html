@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Mojaz — Order preview (demo exhibit)</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23C22B32'/%3E%3Ctext x='32' y='44' font-size='30' fill='white' text-anchor='middle' font-family='Arial' font-weight='bold'%3EM%3C/text%3E%3C/svg%3E"/>
+<link rel="stylesheet" href="../assets/styles.css"/>
+<!-- NOTE: intentionally NO Amplitude scripts on this page — it is an
+     event-silent "after" exhibit. Zero track/identify/SDK calls fire here. -->
+</head>
+<body data-page="preview-checkout" data-root="../" data-silent="true">
+<div class="stage">
+  <div class="phone">
+    <div class="phone-inner">
+      <div class="notch"></div>
+      <div class="badge-after">AFTER · FIX PREVIEW</div>
+      <div class="statusbar">
+        <span class="sb-time">9:41</span>
+        <span class="sb-icons">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="1.6" fill="currentColor"/><rect x="22.6" y="3.8" width="2" height="4.4" rx="1" fill="currentColor" opacity=".4"/></svg>
+        </span>
+      </div>
+
+      <header class="appbar">
+        <button class="back-btn" aria-label="Back" style="opacity:.4; cursor:default;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div>
+          <h1>Confirm your order</h1>
+          <div class="appbar-sub">تأكيد الطلب</div>
+        </div>
+      </header>
+
+      <main class="screen no-tabbar">
+        <div class="card" style="display:flex; align-items:center; gap:12px;">
+          <div style="font-size:32px; line-height:1;">🚗</div>
+          <div style="flex:1;">
+            <div style="font-size:14px; font-weight:700;">Toyota Camry GLE · 2021</div>
+            <div class="small muted mono">JTNB11HK3M3123456</div>
+          </div>
+          <span class="chip gray">Standard Report</span>
+        </div>
+
+        <div class="card mt14" style="border-color:#BFE3DE;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+            <div style="font-size:14.5px; font-weight:800;">What this report contains</div>
+            <span class="chip teal">Free preview</span>
+          </div>
+          <div class="preview-grid">
+            <div class="preview-cell">
+              <div class="pc-k">Owner records</div>
+              <div class="pc-v">2</div>
+              <div class="pc-note">🔒 details in full report</div>
+            </div>
+            <div class="preview-cell">
+              <div class="pc-k">Accident records</div>
+              <div class="pc-v">1 <span class="ok">images ✓</span></div>
+              <div class="pc-note">🔒 details in full report</div>
+            </div>
+            <div class="preview-cell">
+              <div class="pc-k">Service records</div>
+              <div class="pc-v">8</div>
+              <div class="pc-note">🔒 details in full report</div>
+            </div>
+            <div class="preview-cell">
+              <div class="pc-k">Odometer readings</div>
+              <div class="pc-v">5</div>
+              <div class="pc-note">🔒 details in full report</div>
+            </div>
+            <div class="preview-cell">
+              <div class="pc-k">Fahas history</div>
+              <div class="pc-v"><span class="ok">✓ available</span></div>
+              <div class="pc-note">🔒 details in full report</div>
+            </div>
+            <div class="preview-cell">
+              <div class="pc-k">Estimated price</div>
+              <div class="pc-v"><span class="ok">✓ available</span></div>
+              <div class="pc-note">🔒 details in full report</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt14">
+          <div class="price-table">
+            <div class="pt-row"><span>Standard Report</span><span>SAR 64.00</span></div>
+            <div class="pt-row"><span>Service fee</span><span><span class="strike">SAR 5.00</span><span class="waived">Waived</span></span></div>
+            <div class="pt-row"><span>VAT (15%)</span><span>SAR 9.60</span></div>
+            <div class="pt-row total"><span>Total</span><span>SAR 73.60</span></div>
+          </div>
+        </div>
+
+        <button class="btn mt14" type="button">Pay SAR 73.60</button>
+
+        <div class="center" style="margin-top:12px;">
+          <details style="display:inline-block;">
+            <summary class="small" style="color:var(--faint); cursor:pointer; list-style:none; text-decoration:underline;">
+              Data availability &amp; refund policy
+            </summary>
+            <div class="small muted mt8" style="text-align:left; background:var(--bg); border-radius:10px; padding:10px 12px;">
+              Record counts above are confirmed for this vehicle. Payments are
+              non-refundable once the report is issued.
+            </div>
+          </details>
+        </div>
+        <div style="height:24px;"></div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<!-- app.js detects data-silent="true" and skips ALL Amplitude wiring -->
+<script src="../assets/app.js"></script>
+</body>
+</html>

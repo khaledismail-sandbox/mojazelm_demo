@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Mojaz — Sign in</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23C22B32'/%3E%3Ctext x='32' y='44' font-size='30' fill='white' text-anchor='middle' font-family='Arial' font-weight='bold'%3EM%3C/text%3E%3C/svg%3E"/>
+<link rel="stylesheet" href="../assets/styles.css"/>
+<!-- Analytics + Session Replay + Web Experiment (unified smart loader) -->
+<script src="https://cdn.amplitude.com/script/ee599b7fa09aa4b2ec6c88a9013de64e.js"></script>
+<!-- Guides & Surveys (engagement) -->
+<script src="https://cdn.amplitude.com/script/ee599b7fa09aa4b2ec6c88a9013de64e.engagement.js"></script>
+</head>
+<body data-page="auth" data-root="../">
+<div class="stage">
+  <div class="phone">
+    <div class="phone-inner">
+      <div class="notch"></div>
+      <div class="statusbar">
+        <span class="sb-time">9:41</span>
+        <span class="sb-icons">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="1.6" fill="currentColor"/><rect x="22.6" y="3.8" width="2" height="4.4" rx="1" fill="currentColor" opacity=".4"/></svg>
+        </span>
+      </div>
+
+      <header class="appbar">
+        <button class="back-btn" aria-label="Back" onclick="Mojaz.go('../index.html')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div>
+          <h1>Welcome to Mojaz</h1>
+          <div class="appbar-sub">أهلاً بك في موجز</div>
+        </div>
+      </header>
+
+      <main class="screen no-tabbar">
+        <div class="card" style="padding: 18px;">
+          <div class="segmented" id="mode-seg">
+            <button id="seg-login" class="active">Log in</button>
+            <button id="seg-signup">Create account</button>
+          </div>
+
+          <div id="form-panel" class="mt14">
+            <div class="field">
+              <label for="f-name">Full name</label>
+              <input id="f-name" type="text" value="Khaled" autocomplete="off"/>
+            </div>
+            <div class="field">
+              <label for="f-phone">Mobile number</label>
+              <input id="f-phone" type="tel" value="0551234567" autocomplete="off"/>
+              <div class="hint">We'll send a one-time verification code</div>
+            </div>
+            <div class="field">
+              <label for="f-demo">Demo number</label>
+              <input id="f-demo" type="number" value="1" min="1" max="9999"/>
+              <div class="hint">Amplitude User ID: <span class="mono" id="uid-preview"></span></div>
+            </div>
+            <button class="btn" id="send-otp">Send verification code</button>
+            <div class="small muted center mt8" style="font-size:11px;">
+              Demo personas — Log in: returning report buyer · Create account: first-time buyer
+            </div>
+          </div>
+
+          <div id="otp-panel" class="mt14" style="display:none;">
+            <div class="center">
+              <div style="font-size:15px; font-weight:700;">Enter verification code</div>
+              <div class="small muted mt8">Sent by SMS to <span id="otp-phone" class="mono"></span></div>
+            </div>
+            <div class="otp-row">
+              <div class="otp-box" id="otp-1"></div>
+              <div class="otp-box" id="otp-2"></div>
+              <div class="otp-box" id="otp-3"></div>
+              <div class="otp-box" id="otp-4"></div>
+            </div>
+            <div class="small muted center" style="margin-bottom:14px;">Code auto-fills in this demo</div>
+            <button class="btn" id="verify-btn" disabled><span id="verify-label">Verify &amp; continue</span></button>
+            <button class="btn secondary mt8" id="otp-back">Back</button>
+          </div>
+        </div>
+
+        <div class="card mt14" style="background:var(--bg); box-shadow:none;">
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" style="flex:none; margin-top:1px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+            <div class="small muted">Your data is protected. Mojaz uses official government-linked sources under Elm's data policies.</div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/app.js"></script>
+<script>
+(function () {
+  var mode = 'login'; // 'login' → Persona A · 'signup' → Persona B
+
+  var segLogin = document.getElementById('seg-login');
+  var segSignup = document.getElementById('seg-signup');
+  var nameEl = document.getElementById('f-name');
+  var phoneEl = document.getElementById('f-phone');
+  var demoEl = document.getElementById('f-demo');
+  var sendBtn = document.getElementById('send-otp');
+
+  function setMode(m) {
+    mode = m;
+    segLogin.classList.toggle('active', m === 'login');
+    segSignup.classList.toggle('active', m === 'signup');
+    sendBtn.textContent = m === 'login' ? 'Send verification code' : 'Create my account';
+  }
+  segLogin.addEventListener('click', function () { setMode('login'); });
+  segSignup.addEventListener('click', function () { setMode('signup'); });
+
+  // live Amplitude User ID preview
+  function refreshUid() {
+    var n = nameEl.value || 'user';
+    var d = parseInt(demoEl.value, 10) || 1;
+    document.getElementById('uid-preview').textContent = Mojaz.generateUserId(n, d);
+  }
+  nameEl.addEventListener('input', refreshUid);
+  demoEl.addEventListener('input', refreshUid);
+  refreshUid();
+
+  // mock OTP step (auto-fills — demo only, no real credentials)
+  var OTP = ['7', '8', '6', '9'];
+  sendBtn.addEventListener('click', function () {
+    if (!nameEl.value.trim()) { Mojaz.toast('Please enter your name'); return; }
+    document.getElementById('form-panel').style.display = 'none';
+    document.getElementById('otp-panel').style.display = 'block';
+    document.getElementById('otp-phone').textContent = phoneEl.value || '05XXXXXXXX';
+    OTP.forEach(function (digit, i) {
+      setTimeout(function () {
+        var box = document.getElementById('otp-' + (i + 1));
+        box.textContent = digit;
+        box.classList.add('filled');
+        if (i === 3) document.getElementById('verify-btn').disabled = false;
+      }, 350 + i * 260);
+    });
+  });
+
+  document.getElementById('otp-back').addEventListener('click', function () {
+    document.getElementById('otp-panel').style.display = 'none';
+    document.getElementById('form-panel').style.display = 'block';
+    for (var i = 1; i <= 4; i++) {
+      var box = document.getElementById('otp-' + i);
+      box.textContent = '';
+      box.classList.remove('filled');
+    }
+    document.getElementById('verify-btn').disabled = true;
+  });
+
+  document.getElementById('verify-btn').addEventListener('click', function () {
+    this.disabled = true;
+    document.getElementById('verify-label').textContent = 'Verifying…';
+    var name = nameEl.value.trim() || 'user';
+    var demoNum = parseInt(demoEl.value, 10) || 1;
+    var phone = phoneEl.value.trim();
+    // sets persona + user id + Identify, fires Logged In / Account Created, then routes
+    setTimeout(function () { Mojaz.completeAuth(mode, name, demoNum, phone); }, 500);
+  });
+})();
+</script>
+</body>
+</html>

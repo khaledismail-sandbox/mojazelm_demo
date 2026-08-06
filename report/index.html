@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Mojaz — My reports</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23C22B32'/%3E%3Ctext x='32' y='44' font-size='30' fill='white' text-anchor='middle' font-family='Arial' font-weight='bold'%3EM%3C/text%3E%3C/svg%3E"/>
+<link rel="stylesheet" href="../assets/styles.css"/>
+<!-- Analytics + Session Replay + Web Experiment (unified smart loader) -->
+<script src="https://cdn.amplitude.com/script/ee599b7fa09aa4b2ec6c88a9013de64e.js"></script>
+<!-- Guides & Surveys (engagement) -->
+<script src="https://cdn.amplitude.com/script/ee599b7fa09aa4b2ec6c88a9013de64e.engagement.js"></script>
+</head>
+<body data-page="report" data-root="../">
+<div class="stage">
+  <div class="phone">
+    <div class="phone-inner">
+      <div class="notch"></div>
+      <div class="statusbar">
+        <span class="sb-time">9:41</span>
+        <span class="sb-icons">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="1.6" fill="currentColor"/><rect x="22.6" y="3.8" width="2" height="4.4" rx="1" fill="currentColor" opacity=".4"/></svg>
+        </span>
+      </div>
+
+      <header class="appbar">
+        <div>
+          <h1>My reports</h1>
+          <div class="appbar-sub">تقاريري</div>
+        </div>
+      </header>
+
+      <main class="screen" id="report-main"></main>
+
+      <nav class="tabbar">
+        <a class="tab" href="../index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22V12h6v10"/></svg>
+          Home
+        </a>
+        <a class="tab active" href="index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></svg>
+          Reports
+        </a>
+        <a class="tab" href="../packages/index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg>
+          Packages
+        </a>
+        <a class="tab" href="../account/index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Account
+        </a>
+      </nav>
+      <div class="home-indicator"></div>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/app.js"></script>
+<script>
+(function () {
+  var main = document.getElementById('report-main');
+  var orders = Mojaz.LS.getJSON('mojaz_orders', []);
+
+  if (!orders.length) {
+    main.innerHTML =
+      '<div class="card center" style="margin-top:40px; padding:34px 20px;">' +
+      '<div style="font-size:44px;">📄</div>' +
+      '<div style="font-size:16px; font-weight:800; margin-top:10px;">No reports yet</div>' +
+      '<div class="small muted mt8">Search a vehicle and get your first Mojaz report</div>' +
+      '<button class="btn mt14" onclick="Mojaz.go(\'../search/index.html\')">Search a vehicle</button>' +
+      '</div>';
+    return;
+  }
+
+  var last = orders[orders.length - 1];
+  var veh = last.vehicle || { make: 'Vehicle', model: '', year: '', emoji: '🚗' };
+
+  // deterministic report figures derived from the VIN
+  function hash(s) {
+    var h = 2166136261;
+    for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+    return h >>> 0;
+  }
+  var h = hash(last.vin || 'VIN');
+  var owners = 1 + (h % 3);            // 1–3
+  var accidents = h % 2 === 0 ? 1 : 2; // 1–2
+  var services = 5 + (h % 6);          // 5–10
+  var odo = 3 + (h % 4);               // 3–6 readings
+  var baseKm = 40000 + (h % 90000);
+
+  var odoRows = '';
+  for (var i = odo - 1; i >= 0; i--) {
+    var yr = (veh.year || 2021) + Math.min(i, 4);
+    odoRows += '<div class="row"><div class="row-body"><div class="row-title">' +
+      (baseKm + i * 14500).toLocaleString('en-US') + ' km</div>' +
+      '<div class="row-sub">Recorded at periodic inspection</div></div>' +
+      '<div class="row-end">' + yr + '</div></div>';
+  }
+
+  main.innerHTML =
+    '<div class="card" style="border-color:#BFE3DE; background:#F4FBFA;">' +
+      '<div style="display:flex; align-items:center; gap:10px;">' +
+      '<span class="chip teal">✓ Report issued</span>' +
+      '<span class="small muted mono">' + last.id + '</span></div>' +
+    '</div>' +
+
+    '<div class="vehicle-hero mt14"><div class="vh-top">' +
+      '<div><span class="chip gray">' + last.type + '</span>' +
+      '<div class="small muted mt8">Paid ' + Mojaz.money(last.total) + '</div></div>' +
+      '<div class="vh-car">' + veh.emoji + '</div></div>' +
+      '<div class="vh-body"><h2>' + veh.make + ' ' + veh.model + '</h2>' +
+      '<div class="vh-sub">' + veh.year + ' · <span class="mono">' + last.vin + '</span></div></div></div>' +
+
+    '<div class="report-section"><div class="rs-head"><h3>Owner records · سجل الملكية</h3><span class="count-pill">' + owners + '</span></div>' +
+      '<div class="card" style="padding:6px 16px;">' +
+      Array.from({ length: owners }).map(function (_, i) {
+        return '<div class="row"><div class="row-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>' +
+          '<div class="row-body"><div class="row-title">Owner ' + (i + 1) + ' · ' + (i === owners - 1 ? 'Current' : 'Previous') + '</div>' +
+          '<div class="row-sub">' + (i === 0 ? 'First registration in KSA' : 'Ownership transfer') + '</div></div>' +
+          '<div class="row-end">' + ((veh.year || 2020) + i) + '</div></div>';
+      }).join('') +
+      '</div></div>' +
+
+    '<div class="report-section"><div class="rs-head"><h3>Accident records · الحوادث</h3><span class="count-pill">' + accidents + '</span></div>' +
+      '<div class="card" style="padding:6px 16px;">' +
+      Array.from({ length: accidents }).map(function (_, i) {
+        return '<div class="row"><div class="row-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.3 4.3 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg></div>' +
+          '<div class="row-body"><div class="row-title">' + (i === 0 ? 'Moderate damage — front' : 'Minor damage — rear') + '</div>' +
+          '<div class="row-sub">Najm report · images available 📷</div></div>' +
+          '<div class="row-end">' + ((veh.year || 2020) + 1 + i) + '</div></div>';
+      }).join('') +
+      '</div></div>' +
+
+    '<div class="report-section"><div class="rs-head"><h3>Service records · الصيانة</h3><span class="count-pill">' + services + '</span></div>' +
+      '<div class="card"><div class="small muted">' + services + ' maintenance visits at authorized service centers. Last visit: oil &amp; filter change, brake pads.</div></div></div>' +
+
+    '<div class="report-section"><div class="rs-head"><h3>Odometer readings · العداد</h3><span class="count-pill">' + odo + '</span></div>' +
+      '<div class="card" style="padding:6px 16px;">' + odoRows + '</div></div>' +
+
+    '<div class="report-section"><div class="rs-head"><h3>Fahas history · الفحص الدوري</h3><span class="count-pill teal">✓ Pass</span></div>' +
+      '<div class="card"><div class="small muted">Latest MVPI periodic inspection: <strong style="color:var(--teal)">PASS</strong> — brakes, emissions, suspension, lights all within limits.</div></div></div>' +
+
+    '<div class="report-section"><div class="rs-head"><h3>Estimated market price · السعر التقديري</h3></div>' +
+      '<div class="card"><div style="font-size:20px; font-weight:850;">' + (veh.est || 'SAR 84,000 – 92,500') + '</div>' +
+      '<div class="small muted mt8">Based on similar vehicles sold in Saudi Arabia in the last 90 days.</div></div></div>' +
+
+    (orders.length > 1
+      ? '<div class="section-title"><h2>Previous reports</h2></div><div class="card" style="padding:6px 16px;">' +
+        orders.slice(0, -1).reverse().map(function (o) {
+          return '<div class="row"><div class="row-body"><div class="row-title">' +
+            (o.vehicle ? o.vehicle.make + ' ' + o.vehicle.model : 'Vehicle') + '</div>' +
+            '<div class="row-sub mono">' + o.id + '</div></div>' +
+            '<div class="row-end">' + Mojaz.money(o.total) + '</div></div>';
+        }).join('') + '</div>'
+      : '');
+})();
+</script>
+</body>
+</html>

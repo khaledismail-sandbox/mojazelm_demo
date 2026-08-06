@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Mojaz — Payment</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23C22B32'/%3E%3Ctext x='32' y='44' font-size='30' fill='white' text-anchor='middle' font-family='Arial' font-weight='bold'%3EM%3C/text%3E%3C/svg%3E"/>
+<link rel="stylesheet" href="../assets/styles.css"/>
+<!-- Analytics + Session Replay + Web Experiment (unified smart loader) -->
+<script src="https://cdn.amplitude.com/script/ee599b7fa09aa4b2ec6c88a9013de64e.js"></script>
+<!-- Guides & Surveys (engagement) -->
+<script src="https://cdn.amplitude.com/script/ee599b7fa09aa4b2ec6c88a9013de64e.engagement.js"></script>
+</head>
+<body data-page="payment" data-root="../">
+<div class="stage">
+  <div class="phone">
+    <div class="phone-inner">
+      <div class="notch"></div>
+      <div class="statusbar">
+        <span class="sb-time">9:41</span>
+        <span class="sb-icons">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="1.6" fill="currentColor"/><rect x="22.6" y="3.8" width="2" height="4.4" rx="1" fill="currentColor" opacity=".4"/></svg>
+        </span>
+      </div>
+
+      <header class="appbar">
+        <button class="back-btn" aria-label="Back" onclick="Mojaz.go('../vehicle/index.html')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div>
+          <h1>Payment</h1>
+          <div class="appbar-sub">الدفع</div>
+        </div>
+      </header>
+
+      <main class="screen no-tabbar" id="pay-screen">
+        <div class="card" style="display:flex; align-items:center; gap:12px;">
+          <div style="font-size:32px; line-height:1;" id="veh-emoji">🚗</div>
+          <div style="flex:1;">
+            <div style="font-size:14px; font-weight:700;" id="veh-title">—</div>
+            <div class="small muted mono" id="veh-vin">—</div>
+          </div>
+          <span class="chip red" id="report-chip">Report</span>
+        </div>
+
+        <div class="section-title"><h2>Payment method</h2><span class="ar-hint">طريقة الدفع</span></div>
+        <div class="option-row pay-method selected">
+          <div class="radio-dot"></div>
+          <div class="opt-body">
+            <div class="opt-title">mada · •••• 4321</div>
+            <div class="opt-sub">Saudi debit card</div>
+          </div>
+          <span style="font-weight:800; color:#0B6B4F; font-size:13px; flex:none;">mada</span>
+        </div>
+        <div class="option-row pay-method">
+          <div class="radio-dot"></div>
+          <div class="opt-body">
+            <div class="opt-title">Apple Pay</div>
+            <div class="opt-sub">Pay with Face ID</div>
+          </div>
+          <span style="font-weight:700; font-size:15px; flex:none;"> Pay</span>
+        </div>
+        <div class="option-row pay-method">
+          <div class="radio-dot"></div>
+          <div class="opt-body">
+            <div class="opt-title">Tabby · 4 payments</div>
+            <div class="opt-sub" id="tabby-sub">Split into 4 interest-free payments</div>
+          </div>
+          <span style="font-weight:800; color:#3EBFA5; font-size:13px; flex:none;">tabby</span>
+        </div>
+
+        <div class="card mt14">
+          <div style="display:flex; gap:8px;">
+            <input id="promo-input" type="text" placeholder="Promo code (try EID10)" autocomplete="off"
+                   style="flex:1; min-height:46px; border:1.5px solid var(--line); border-radius:12px; padding:0 12px; font-size:14px; font-family:inherit; outline:none;"/>
+            <button class="btn secondary" id="promo-apply" style="width:auto; min-height:46px; padding:0 16px; font-size:14px;">Apply</button>
+          </div>
+          <div class="small mt8" id="promo-msg" style="display:none;"></div>
+        </div>
+
+        <div class="card mt14">
+          <div class="price-table">
+            <div class="pt-row"><span id="pt-name">Mojaz Report</span><span id="pt-price">—</span></div>
+            <div class="pt-row" id="pt-discount-row" style="display:none;"><span>Promo discount</span><span class="waived" id="pt-discount">—</span></div>
+            <div class="pt-row"><span>Service fee</span><span><span class="strike">SAR 5.00</span><span class="waived">Waived</span></span></div>
+            <div class="pt-row"><span>VAT (15%)</span><span id="pt-vat">—</span></div>
+            <div class="pt-row total"><span>Total</span><span id="pt-total">—</span></div>
+          </div>
+        </div>
+
+        <button class="btn mt14" id="pay-btn"><span id="pay-label">Pay <span id="pay-amount">—</span></span></button>
+        <div class="small muted center mt8">Secured by mada payment gateway · PCI DSS</div>
+      </main>
+
+      <main class="screen no-tabbar" id="success-screen" style="display:none;">
+        <div class="success-pop">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>
+        </div>
+        <div class="center">
+          <h2 style="font-size:20px; font-weight:800;">Payment successful</h2>
+          <div class="muted small mt8">Your Mojaz report is ready</div>
+          <div class="chip gray mt14 mono" id="order-id-chip" style="margin-top:14px;">ORD_—</div>
+        </div>
+        <div class="card mt20 center">
+          <div class="spinner dark" style="margin: 6px auto;"></div>
+          <div class="small muted mt8">Opening your report…</div>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/app.js"></script>
+<script>
+(function () {
+  var order = Mojaz.LS.getJSON('mojaz_order', null);
+  var vin = Mojaz.LS.get('mojaz_vin');
+  var veh = Mojaz.LS.getJSON('mojaz_vehicle', null);
+
+  // guards — Persona B can NEVER reach payment in this build
+  if (!order || !vin || !veh) { Mojaz.go('../index.html'); return; }
+  if (!Mojaz.persona()) { Mojaz.go('../auth/index.html'); return; }
+  if (!Mojaz.isPersonaA()) { Mojaz.go('../order/index.html'); return; }
+
+  document.getElementById('veh-emoji').textContent = veh.emoji;
+  document.getElementById('veh-title').textContent = veh.make + ' ' + veh.model + ' · ' + veh.year;
+  document.getElementById('veh-vin').textContent = vin;
+  document.getElementById('report-chip').textContent = order.type;
+
+  function renderTotals() {
+    document.getElementById('pt-name').textContent = order.type;
+    document.getElementById('pt-price').textContent = Mojaz.money(order.price);
+    document.getElementById('pt-vat').textContent = Mojaz.money(order.vat_amount);
+    document.getElementById('pt-total').textContent = Mojaz.money(order.total_payable);
+    document.getElementById('pay-amount').textContent = Mojaz.money(order.total_payable);
+    document.getElementById('tabby-sub').textContent =
+      '4 × ' + Mojaz.money(order.total_payable / 4) + ' · interest-free';
+    var dr = document.getElementById('pt-discount-row');
+    if (order.promo_applied) {
+      dr.style.display = 'flex';
+      document.getElementById('pt-discount').textContent = '− ' + Mojaz.money(order.saving_amount);
+    } else {
+      dr.style.display = 'none';
+    }
+  }
+  renderTotals();
+
+  // Funnel step 4 — payment sheet opened
+  Mojaz.track('Payment Started', {
+    report_sku: order.sku,
+    report_type: order.type,
+    report_price: order.price,
+    order_value: order.order_value,
+    service_fee: order.service_fee,
+    vat_amount: order.vat_amount,
+    total_payable: order.total_payable,
+    fee_waived: order.fee_waived
+  });
+
+  // payment method selection (visual)
+  document.querySelectorAll('.pay-method').forEach(function (row) {
+    row.addEventListener('click', function () {
+      document.querySelectorAll('.pay-method').forEach(function (r) { r.classList.remove('selected'); });
+      row.classList.add('selected');
+    });
+  });
+
+  // promo code — EID10 gives 10% off
+  document.getElementById('promo-apply').addEventListener('click', function () {
+    var code = document.getElementById('promo-input').value.trim().toUpperCase();
+    if (!code) { Mojaz.toast('Enter a promo code'); return; }
+    var applied = code === 'EID10';
+    order = Mojaz.buildOrder(order.sku, { attempted: true, applied: applied, discount_pct: 0.10 });
+    Mojaz.LS.setJSON('mojaz_order', order);
+    renderTotals();
+
+    var props = { promo_attempted: true, promo_applied: applied };
+    if (applied) {
+      props.discount_pct = order.discount_pct;
+      props.saving_amount = order.saving_amount;
+    }
+    Mojaz.track('Promo Code Entered', props);
+
+    var msg = document.getElementById('promo-msg');
+    msg.style.display = 'block';
+    msg.style.color = applied ? 'var(--teal)' : 'var(--red-dark)';
+    msg.style.fontWeight = '700';
+    msg.textContent = applied
+      ? 'EID10 applied — you saved ' + Mojaz.money(order.saving_amount)
+      : 'Code "' + code + '" is not valid';
+  });
+
+  // Funnel step 5 — conversion with reserved revenue fields TOP-LEVEL
+  document.getElementById('pay-btn').addEventListener('click', function () {
+    var btn = this;
+    btn.disabled = true;
+    document.getElementById('pay-label').innerHTML = '<span class="spinner"></span>&nbsp; Processing…';
+
+    setTimeout(function () {
+      var orderId = Mojaz.nextOrderId();
+      var completed = Mojaz.LS.getJSON('mojaz_orders', []);
+      var isFirst = !Mojaz.isPersonaA() && completed.length === 0;
+
+      Mojaz.track('Report Purchased',
+        {
+          report_order_id: orderId,
+          report_sku: order.sku,
+          report_type: order.type,
+          report_price: order.price,
+          order_value: order.order_value,
+          service_fee: order.service_fee,
+          vat_amount: order.vat_amount,
+          total_payable: order.total_payable,
+          fee_waived: order.fee_waived,
+          is_first_report: isFirst,
+          promo_attempted: !!order.promo_attempted,
+          promo_applied: !!order.promo_applied,
+          vehicle_vin: vin
+        },
+        // reserved fields TOP-LEVEL so Revenue charts populate
+        { price: order.total_payable, quantity: 1, revenue: order.total_payable, revenueType: 'report_purchase' }
+      );
+
+      completed.push({
+        id: orderId, sku: order.sku, type: order.type, total: order.total_payable,
+        vin: vin, vehicle: veh, at: new Date().toISOString()
+      });
+      Mojaz.LS.setJSON('mojaz_orders', completed);
+      Mojaz.LS.del('mojaz_order');
+
+      document.getElementById('pay-screen').style.display = 'none';
+      document.getElementById('success-screen').style.display = 'block';
+      document.getElementById('order-id-chip').textContent = orderId;
+
+      setTimeout(function () { Mojaz.flushGo('../report/index.html'); }, 1500);
+    }, 1200);
+  });
+})();
+</script>
+</body>
+</html>

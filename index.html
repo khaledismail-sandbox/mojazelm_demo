@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Mojaz — Vehicle History Reports</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23C22B32'/%3E%3Ctext x='32' y='44' font-size='30' fill='white' text-anchor='middle' font-family='Arial' font-weight='bold'%3EM%3C/text%3E%3C/svg%3E"/>
+<link rel="stylesheet" href="assets/styles.css"/>
+<!-- Analytics + Session Replay + Web Experiment (unified smart loader) -->
+<script src="https://cdn.amplitude.com/script/ee599b7fa09aa4b2ec6c88a9013de64e.js"></script>
+<!-- Guides & Surveys (engagement) -->
+<script src="https://cdn.amplitude.com/script/ee599b7fa09aa4b2ec6c88a9013de64e.engagement.js"></script>
+</head>
+<body data-page="home" data-root="./">
+<div class="stage">
+  <div class="phone">
+    <div class="phone-inner">
+      <div class="notch"></div>
+      <div class="statusbar">
+        <span class="sb-time">9:41</span>
+        <span class="sb-icons">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 9.5a2 2 0 0 1 2 2L8 12l-2-.5a2 2 0 0 1 2-2Zm-4.6-3a6.5 6.5 0 0 1 9.2 0L11 8.1a4.5 4.5 0 0 0-6 0L3.4 6.5ZM.6 3.6a10.5 10.5 0 0 1 14.8 0L14 5.1a8.5 8.5 0 0 0-12 0L.6 3.6Z"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="1.6" fill="currentColor"/><rect x="22.6" y="3.8" width="2" height="4.4" rx="1" fill="currentColor" opacity=".4"/></svg>
+        </span>
+      </div>
+
+      <header class="appbar">
+        <div class="brand">
+          <div class="brand-badge"><span class="ar">موجز</span><span class="en">Mojaz</span></div>
+          <div class="brand-name">Mojaz<small>Vehicle history reports · by Elm</small></div>
+        </div>
+        <div class="spacer"></div>
+        <button class="back-btn" aria-label="Notifications" onclick="Mojaz.toast('No new notifications')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M13.7 20a2 2 0 0 1-3.4 0"/></svg>
+        </button>
+      </header>
+
+      <main class="screen">
+        <div id="signin-banner" class="card" style="display:none; border-color:#EAD3D4; background:#FFFBFB;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div class="row-icon" style="width:42px;height:42px;border-radius:12px;background:var(--red-tint);color:var(--red);display:flex;align-items:center;justify-content:center;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div style="flex:1;">
+              <div style="font-size:14px;font-weight:700;">Sign in to get your Mojaz report</div>
+              <div class="small muted">Check any vehicle's history before you buy</div>
+            </div>
+            <a class="link-red" href="auth/index.html">Sign in</a>
+          </div>
+        </div>
+
+        <div id="greeting" class="section-title" style="display:none; margin-top:8px;">
+          <h2 id="greeting-text">Welcome back</h2>
+          <span class="ar-hint">أهلاً بك</span>
+        </div>
+
+        <div class="hero" style="margin-top:12px;">
+          <h2>Know the car's story<br/>before you buy it</h2>
+          <div class="hero-ar">تقرير موجز عن تاريخ المركبة</div>
+          <div class="hero-search">
+            <input id="hero-q" type="text" placeholder="Serial or chassis number" autocomplete="off"/>
+            <button id="hero-go">Search</button>
+          </div>
+        </div>
+
+        <div class="section-title">
+          <h2>Our services</h2>
+          <span class="ar-hint">خدماتنا</span>
+        </div>
+        <div class="tiles">
+          <div class="tile" id="tile-report">
+            <div class="tile-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></svg>
+            </div>
+            <div class="tile-name">Mojaz Report</div>
+            <div class="tile-ar">تقرير موجز</div>
+          </div>
+          <div class="tile" id="tile-inspection">
+            <div class="tile-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/><path d="m8.5 11 1.8 1.8 3.2-3.6"/></svg>
+            </div>
+            <div class="tile-name">Inspection</div>
+            <div class="tile-ar">الفحص الفني</div>
+          </div>
+          <div class="tile" id="tile-packages">
+            <div class="tile-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg>
+            </div>
+            <div class="tile-name">Packages</div>
+            <div class="tile-ar">الباقات</div>
+          </div>
+        </div>
+
+        <div class="upsell mt14" id="upsell-tile">
+          <div class="up-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF9BA0" stroke-width="1.8"><path d="M20 12v9H4v-9"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7Zm0 0h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7Z"/></svg>
+          </div>
+          <div>
+            <div class="up-title">Recommended: 5-Report Package</div>
+            <div class="up-sub">Save SAR 32 — perfect while car shopping</div>
+          </div>
+          <div class="up-cta">View →</div>
+        </div>
+
+        <div id="recent-vehicle"></div>
+
+        <div class="section-title">
+          <h2>How Mojaz works</h2>
+          <span class="ar-hint">كيف يعمل موجز</span>
+        </div>
+        <div class="card" style="padding: 6px 16px;">
+          <div class="row">
+            <div class="row-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div>
+            <div class="row-body">
+              <div class="row-title">1 · Search the vehicle</div>
+              <div class="row-sub">Enter the serial, chassis or plate number</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="row-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg></div>
+            <div class="row-body">
+              <div class="row-title">2 · Get the Mojaz report</div>
+              <div class="row-sub">Owners, accidents, odometer, fahas & more</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="row-icon teal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 6 9 17l-5-5"/></svg></div>
+            <div class="row-body">
+              <div class="row-title">3 · Buy with confidence</div>
+              <div class="row-sub">Reliable data from official sources</div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <nav class="tabbar">
+        <a class="tab active" href="index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22V12h6v10"/></svg>
+          Home
+        </a>
+        <a class="tab" href="report/index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></svg>
+          Reports
+        </a>
+        <a class="tab" href="packages/index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg>
+          Packages
+        </a>
+        <a class="tab" href="account/index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Account
+        </a>
+      </nav>
+      <div class="home-indicator"></div>
+
+      <div class="sheet-backdrop" id="inspection-sheet-backdrop" onclick="Mojaz.closeSheet('inspection-sheet')"></div>
+      <div class="sheet" id="inspection-sheet">
+        <div class="grabber"></div>
+        <h3>Vehicle Inspection · الفحص الفني</h3>
+        <div class="sheet-sub">Book a 200-point technical inspection at a certified center, or bundle it with your Mojaz report.</div>
+        <div class="card" style="box-shadow:none; background:var(--bg); border:none; margin-bottom:12px;">
+          <div class="row" style="border:none; padding:6px 0;">
+            <div class="row-icon teal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m8.5 11 1.8 1.8 3.2-3.6"/><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div>
+            <div class="row-body">
+              <div class="row-title">Engine, body & chassis checks</div>
+              <div class="row-sub">Certified centers in Riyadh, Jeddah & Dammam</div>
+            </div>
+          </div>
+        </div>
+        <button class="btn" onclick="Mojaz.closeSheet('inspection-sheet'); Mojaz.go('search/index.html')">Search your vehicle first</button>
+        <button class="btn secondary mt8" onclick="Mojaz.closeSheet('inspection-sheet')">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  // Funnel step 1 — home screen loads
+  Mojaz.track('App Opened', { is_returning: Mojaz.LS.get('mojaz_visited') === '1' });
+  Mojaz.LS.set('mojaz_visited', '1');
+
+  // auth-aware chrome
+  var name = Mojaz.LS.get('mojaz_user_name');
+  if (Mojaz.persona() && name) {
+    document.getElementById('greeting').style.display = 'flex';
+    document.getElementById('greeting-text').textContent = 'Welcome back, ' + name;
+  } else {
+    document.getElementById('signin-banner').style.display = 'block';
+  }
+
+  // hero search → carries the query to /search/ (event fires there on submit)
+  function heroGo() {
+    var q = document.getElementById('hero-q').value.trim();
+    if (q) Mojaz.LS.set('mojaz_prefill_query', q);
+    Mojaz.go('search/index.html');
+  }
+  document.getElementById('hero-go').addEventListener('click', heroGo);
+  document.getElementById('hero-q').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') heroGo();
+  });
+
+  // service tiles — Services Browsed
+  var SERVICES_SHOWN = 3;
+  document.getElementById('tile-report').addEventListener('click', function () {
+    Mojaz.trackGo('Services Browsed', { service_name: 'Mojaz Report', services_shown: SERVICES_SHOWN }, 'search/index.html');
+  });
+  document.getElementById('tile-inspection').addEventListener('click', function () {
+    Mojaz.track('Services Browsed', { service_name: 'Inspection', services_shown: SERVICES_SHOWN });
+    Mojaz.openSheet('inspection-sheet');
+  });
+  document.getElementById('tile-packages').addEventListener('click', function () {
+    Mojaz.trackGo('Services Browsed', { service_name: 'Packages', services_shown: SERVICES_SHOWN }, 'packages/index.html');
+  });
+
+  // package upsell tile — Recommended Package Clicked
+  document.getElementById('upsell-tile').addEventListener('click', function () {
+    Mojaz.trackGo('Recommended Package Clicked', {
+      package_type: 'bundle',
+      discount_pct: 0.10,
+      saving_amount: 32.00
+    }, 'packages/index.html');
+  });
+
+  // recent vehicle shortcut
+  var veh = Mojaz.LS.getJSON('mojaz_vehicle', null);
+  var vin = Mojaz.LS.get('mojaz_vin');
+  if (veh && vin) {
+    var el = document.createElement('div');
+    el.className = 'card mt14';
+    el.style.cursor = 'pointer';
+    el.innerHTML =
+      '<div style="display:flex; align-items:center; gap:12px;">' +
+      '<div style="font-size:34px; line-height:1;">' + veh.emoji + '</div>' +
+      '<div style="flex:1;"><div style="font-size:14px;font-weight:700;">' + veh.make + ' ' + veh.model + ' · ' + veh.year + '</div>' +
+      '<div class="small muted mono">' + vin + '</div></div>' +
+      '<span class="link-red">Open →</span></div>';
+    el.addEventListener('click', function () { Mojaz.go('vehicle/index.html'); });
+    var slot = document.getElementById('recent-vehicle');
+    slot.appendChild(el);
+    var title = document.createElement('div');
+    title.className = 'section-title';
+    title.innerHTML = '<h2>Recently searched</h2><span class="ar-hint">آخر عمليات البحث</span>';
+    slot.insertBefore(title, el);
+  }
+})();
+</script>
+</body>
+</html>

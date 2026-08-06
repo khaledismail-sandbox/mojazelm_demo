@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Mojaz — Sample report</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23C22B32'/%3E%3Ctext x='32' y='44' font-size='30' fill='white' text-anchor='middle' font-family='Arial' font-weight='bold'%3EM%3C/text%3E%3C/svg%3E"/>
+<link rel="stylesheet" href="../assets/styles.css"/>
+<!-- Analytics + Session Replay + Web Experiment (unified smart loader) -->
+<script src="https://cdn.amplitude.com/script/ee599b7fa09aa4b2ec6c88a9013de64e.js"></script>
+<!-- Guides & Surveys (engagement) -->
+<script src="https://cdn.amplitude.com/script/ee599b7fa09aa4b2ec6c88a9013de64e.engagement.js"></script>
+</head>
+<body data-page="sample-report" data-root="../">
+<div class="stage">
+  <div class="phone">
+    <div class="phone-inner">
+      <div class="notch"></div>
+      <div class="statusbar">
+        <span class="sb-time">9:41</span>
+        <span class="sb-icons">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="1.6" fill="currentColor"/><rect x="22.6" y="3.8" width="2" height="4.4" rx="1" fill="currentColor" opacity=".4"/></svg>
+        </span>
+      </div>
+
+      <header class="appbar">
+        <button class="back-btn" aria-label="Back" onclick="Mojaz.go('../index.html')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div>
+          <h1>Sample report</h1>
+          <div class="appbar-sub">نموذج التقرير</div>
+        </div>
+      </header>
+
+      <main class="screen no-tabbar watermark-wrap">
+        <div class="card" style="border-color:#EAD3D4; background:#FFFBFB;">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+            <div>
+              <div style="font-size:13.5px; font-weight:800;">Example format only</div>
+              <div class="small muted" style="margin-top:2px;">Actual records differ per vehicle</div>
+            </div>
+            <div style="text-align:right;">
+              <span class="stars">★★★★<span style="opacity:.45">★</span></span>
+              <div class="small muted">4.5 · 7.1k ratings</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vehicle-hero mt14">
+          <div class="vh-top">
+            <div><span class="chip gray">Standard Report</span>
+              <div class="small muted mt8">Sample vehicle</div></div>
+            <div class="vh-car">🚗</div>
+          </div>
+          <div class="vh-body">
+            <h2>Toyota Camry GLE</h2>
+            <div class="vh-sub">2021 · Pearl White · <span class="mono">JTNB11HK3M3123456</span></div>
+          </div>
+        </div>
+
+        <div class="report-section">
+          <div class="rs-head"><h3>Owner records · سجل الملكية</h3><span class="count-pill">2</span></div>
+          <div class="card" style="padding:6px 16px;">
+            <div class="row">
+              <div class="row-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              <div class="row-body"><div class="row-title">Owner 1 · Previous</div><div class="row-sub">First registration in KSA</div></div>
+              <div class="row-end">2021</div>
+            </div>
+            <div class="row">
+              <div class="row-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              <div class="row-body"><div class="row-title">Owner 2 · Current</div><div class="row-sub">Ownership transfer</div></div>
+              <div class="row-end">2023</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="report-section">
+          <div class="rs-head"><h3>Accident records · الحوادث</h3><span class="count-pill">1</span></div>
+          <div class="card" style="padding:6px 16px;">
+            <div class="row">
+              <div class="row-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.3 4.3 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg></div>
+              <div class="row-body"><div class="row-title">Minor damage — rear bumper</div><div class="row-sub">Najm report · images available 📷</div></div>
+              <div class="row-end">2022</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="report-section">
+          <div class="rs-head"><h3>Odometer readings · العداد</h3><span class="count-pill">5</span></div>
+          <div class="card" style="padding:6px 16px;">
+            <div class="row"><div class="row-body"><div class="row-title">88,400 km</div><div class="row-sub">Periodic inspection</div></div><div class="row-end">2025</div></div>
+            <div class="row"><div class="row-body"><div class="row-title">64,900 km</div><div class="row-sub">Periodic inspection</div></div><div class="row-end">2024</div></div>
+            <div class="row"><div class="row-body"><div class="row-title">41,200 km</div><div class="row-sub">Service center</div></div><div class="row-end">2023</div></div>
+          </div>
+        </div>
+
+        <div class="report-section">
+          <div class="rs-head"><h3>Fahas history · الفحص الدوري</h3><span class="count-pill teal">✓ Pass</span></div>
+          <div class="card"><div class="small muted">Latest MVPI inspection: <strong style="color:var(--teal)">PASS</strong> — all systems within limits.</div></div>
+        </div>
+
+        <div class="report-section">
+          <div class="rs-head"><h3>Estimated market price · السعر التقديري</h3></div>
+          <div class="card">
+            <div style="font-size:20px; font-weight:850;">SAR 84,000 – 92,500</div>
+            <div class="small muted mt8">Based on similar vehicles sold in KSA in the last 90 days.</div>
+          </div>
+        </div>
+
+        <button class="btn mt20" onclick="Mojaz.go('../search/index.html')">Search a vehicle</button>
+        <div style="height:20px;"></div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/app.js"></script>
+<script>
+(function () {
+  // fires when the sample report renders (single source of truth for this event)
+  Mojaz.track('Sample Report Viewed', { sample_rating: 4.5 });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Mojaz — Vehicle summary</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23C22B32'/%3E%3Ctext x='32' y='44' font-size='30' fill='white' text-anchor='middle' font-family='Arial' font-weight='bold'%3EM%3C/text%3E%3C/svg%3E"/>
+<link rel="stylesheet" href="../assets/styles.css"/>
+<!-- Analytics + Session Replay + Web Experiment (unified smart loader) -->
+<script src="https://cdn.amplitude.com/script/ee599b7fa09aa4b2ec6c88a9013de64e.js"></script>
+<!-- Guides & Surveys (engagement) -->
+<script src="https://cdn.amplitude.com/script/ee599b7fa09aa4b2ec6c88a9013de64e.engagement.js"></script>
+</head>
+<body data-page="vehicle" data-root="../">
+<div class="stage">
+  <div class="phone">
+    <div class="phone-inner">
+      <div class="notch"></div>
+      <div class="statusbar">
+        <span class="sb-time">9:41</span>
+        <span class="sb-icons">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="1.6" fill="currentColor"/><rect x="22.6" y="3.8" width="2" height="4.4" rx="1" fill="currentColor" opacity=".4"/></svg>
+        </span>
+      </div>
+
+      <header class="appbar">
+        <button class="back-btn" aria-label="Back" onclick="Mojaz.go('../search/index.html')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div>
+          <h1>Vehicle summary</h1>
+          <div class="appbar-sub">ملخص المركبة</div>
+        </div>
+      </header>
+
+      <main class="screen">
+        <div class="vehicle-hero">
+          <div class="vh-top">
+            <div>
+              <span class="chip teal">✓ Vehicle found</span>
+              <div class="small muted mt8">Matched from official records</div>
+            </div>
+            <div class="vh-car" id="veh-emoji">🚗</div>
+          </div>
+          <div class="vh-body">
+            <h2 id="veh-title">—</h2>
+            <div class="vh-sub" id="veh-sub">—</div>
+            <div class="spec-grid">
+              <div class="spec"><div class="spec-k">Chassis (VIN)</div><div class="spec-v mono" id="veh-vin">—</div></div>
+              <div class="spec"><div class="spec-k">Model year</div><div class="spec-v" id="veh-year">—</div></div>
+              <div class="spec"><div class="spec-k">Color</div><div class="spec-v" id="veh-color">—</div></div>
+              <div class="spec"><div class="spec-k">Registration</div><div class="spec-v">Active · KSA</div></div>
+            </div>
+            <button class="btn mt14" id="get-report-btn">Get Mojaz Report</button>
+            <button class="btn ghost-red mt8" id="save-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"/></svg>
+              <span id="save-label">Save to my garage</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="card mt14">
+          <div style="display:flex; align-items:center; justify-content:space-between;">
+            <div>
+              <div style="font-size:14px; font-weight:700;">What's inside a Mojaz report?</div>
+              <div class="small muted mt8" style="margin-top:3px;">Owners · accidents · odometer · fahas · market price</div>
+            </div>
+            <a class="link-red" id="sample-link" href="../sample-report/index.html">View sample</a>
+          </div>
+        </div>
+
+        <div class="section-title">
+          <h2>Report data sources</h2>
+          <span class="ar-hint">مصادر البيانات</span>
+        </div>
+        <div class="card" style="padding:6px 16px;">
+          <div class="row">
+            <div class="row-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21h18M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg></div>
+            <div class="row-body"><div class="row-title">Official registration records</div><div class="row-sub">Ownership transfers from date of entry into KSA</div></div>
+          </div>
+          <div class="row">
+            <div class="row-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.3 4.3 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg></div>
+            <div class="row-body"><div class="row-title">Accident records</div><div class="row-sub">Najm-reported incidents, with images when available</div></div>
+          </div>
+          <div class="row">
+            <div class="row-icon teal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m8.5 11 1.8 1.8 3.2-3.6"/><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div>
+            <div class="row-body"><div class="row-title">Periodic inspection (fahas)</div><div class="row-sub">MVPI technical inspection history</div></div>
+          </div>
+        </div>
+      </main>
+
+      <nav class="tabbar">
+        <a class="tab" href="../index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22V12h6v10"/></svg>
+          Home
+        </a>
+        <a class="tab" href="../report/index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></svg>
+          Reports
+        </a>
+        <a class="tab" href="../packages/index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg>
+          Packages
+        </a>
+        <a class="tab" href="../account/index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Account
+        </a>
+      </nav>
+      <div class="home-indicator"></div>
+
+      <!-- report type selector -->
+      <div class="sheet-backdrop" id="report-sheet-backdrop" onclick="Mojaz.closeSheet('report-sheet')"></div>
+      <div class="sheet" id="report-sheet">
+        <div class="grabber"></div>
+        <h3>Choose your report</h3>
+        <div class="sheet-sub">Prices include everything except 15% VAT, shown at checkout.</div>
+        <div class="option-row report-option" data-sku="ITEM_001">
+          <div class="radio-dot"></div>
+          <div class="opt-body">
+            <div class="opt-title">Standard Report</div>
+            <div class="opt-sub">Owners, accidents, odometer, fahas</div>
+          </div>
+          <div class="opt-price">SAR 64.00</div>
+        </div>
+        <div class="option-row report-option" data-sku="ITEM_002">
+          <div class="radio-dot"></div>
+          <div class="opt-body">
+            <div class="opt-title">Comprehensive Report</div>
+            <div class="opt-sub">Everything + market valuation & service history</div>
+          </div>
+          <div class="opt-price">SAR 149.00</div>
+        </div>
+        <div class="option-row report-option" data-sku="ITEM_003">
+          <div class="radio-dot"></div>
+          <div class="opt-body">
+            <div class="opt-title">Report + Inspection Bundle</div>
+            <div class="opt-sub">Comprehensive report + 200-point inspection</div>
+          </div>
+          <div class="opt-price">SAR 279.00</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/app.js"></script>
+<script>
+(function () {
+  var vin = Mojaz.LS.get('mojaz_vin');
+  var veh = Mojaz.LS.getJSON('mojaz_vehicle', null);
+  var q = Mojaz.LS.get('mojaz_search_query') || '';
+
+  if (!vin || !veh) { Mojaz.go('../search/index.html'); return; }
+
+  document.getElementById('veh-emoji').textContent = veh.emoji;
+  document.getElementById('veh-title').textContent = veh.make + ' ' + veh.model;
+  document.getElementById('veh-sub').textContent = veh.year + ' · ' + veh.color;
+  document.getElementById('veh-vin').textContent = vin;
+  document.getElementById('veh-year').textContent = veh.year;
+  document.getElementById('veh-color').textContent = veh.color;
+
+  // Funnel step 2 — lookup succeeded, summary card rendered
+  Mojaz.track('Vehicle Summary Viewed', {
+    vehicle_vin: vin,
+    search_query: q,
+    vehicles_matched: 1
+  });
+
+  // save to garage
+  var garage = Mojaz.LS.getJSON('mojaz_garage', []);
+  var saved = garage.some(function (g) { return g.vin === vin; });
+  var saveBtn = document.getElementById('save-btn');
+  var saveLabel = document.getElementById('save-label');
+  function renderSaved() {
+    saveLabel.textContent = saved ? 'Saved to my garage ✓' : 'Save to my garage';
+  }
+  renderSaved();
+  saveBtn.addEventListener('click', function () {
+    if (saved) { Mojaz.toast('Already in your garage'); return; }
+    garage.push({ vin: vin, make: veh.make, model: veh.model, year: veh.year, emoji: veh.emoji });
+    Mojaz.LS.setJSON('mojaz_garage', garage);
+    saved = true;
+    renderSaved();
+    Mojaz.track('Vehicle Saved', { vehicle_vin: vin });
+    Mojaz.toast('Saved to your garage');
+  });
+
+  // Get Mojaz Report → choose type → Report Order Started → persona routing
+  document.getElementById('get-report-btn').addEventListener('click', function () {
+    if (!Mojaz.persona()) {
+      Mojaz.LS.set('mojaz_return_to', '../vehicle/index.html');
+      Mojaz.go('../auth/index.html');
+      return;
+    }
+    Mojaz.openSheet('report-sheet');
+  });
+
+  document.querySelectorAll('.report-option').forEach(function (row) {
+    row.addEventListener('click', function () {
+      document.querySelectorAll('.report-option').forEach(function (r) { r.classList.remove('selected'); });
+      row.classList.add('selected');
+      var sku = row.getAttribute('data-sku');
+      setTimeout(function () {
+        Mojaz.closeSheet('report-sheet');
+        Mojaz.startReportOrder(sku);
+      }, 220);
+    });
+  });
+
+  // sample report — event fires on the sample page itself when it renders
+  document.getElementById('sample-link').addEventListener('click', function (e) {
+    e.preventDefault();
+    Mojaz.go('../sample-report/index.html');
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Mojaz — Account</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23C22B32'/%3E%3Ctext x='32' y='44' font-size='30' fill='white' text-anchor='middle' font-family='Arial' font-weight='bold'%3EM%3C/text%3E%3C/svg%3E"/>
+<link rel="stylesheet" href="../assets/styles.css"/>
+<!-- Analytics + Session Replay + Web Experiment (unified smart loader) -->
+<script src="https://cdn.amplitude.com/script/ee599b7fa09aa4b2ec6c88a9013de64e.js"></script>
+<!-- Guides & Surveys (engagement) -->
+<script src="https://cdn.amplitude.com/script/ee599b7fa09aa4b2ec6c88a9013de64e.engagement.js"></script>
+</head>
+<body data-page="account" data-root="../">
+<div class="stage">
+  <div class="phone">
+    <div class="phone-inner">
+      <div class="notch"></div>
+      <div class="statusbar">
+        <span class="sb-time">9:41</span>
+        <span class="sb-icons">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="1.6" fill="currentColor"/><rect x="22.6" y="3.8" width="2" height="4.4" rx="1" fill="currentColor" opacity=".4"/></svg>
+        </span>
+      </div>
+
+      <header class="appbar">
+        <div>
+          <h1>Account</h1>
+          <div class="appbar-sub">حسابي</div>
+        </div>
+      </header>
+
+      <main class="screen">
+        <div id="profile-slot"></div>
+
+        <div class="section-title"><h2>My garage</h2><span class="ar-hint">مركباتي</span></div>
+        <div id="garage-slot"></div>
+
+        <div class="section-title"><h2>SDK status</h2><span class="ar-hint">demo</span></div>
+        <div class="card" style="padding:8px 16px;">
+          <div class="status-row"><span>Analytics</span><span id="st-analytics" class="status-bad">checking…</span></div>
+          <div class="status-row"><span>Session Replay</span><span id="st-sr" class="status-bad">checking…</span></div>
+          <div class="status-row"><span>Experiment</span><span id="st-exp" class="status-bad">checking…</span></div>
+          <div class="status-row"><span>Guides &amp; Surveys</span><span id="st-eng" class="status-bad">checking…</span></div>
+        </div>
+
+        <details class="demo-settings">
+          <summary>Demo settings · v3.19.1</summary>
+          <div class="card mt8">
+            <div class="field">
+              <label>Platform sent on events</label>
+              <div class="segmented" id="platform-seg">
+                <button data-platform="iOS">iOS</button>
+                <button data-platform="Android">Android</button>
+              </div>
+            </div>
+            <div class="field">
+              <label for="city-sel">City / region sent on events</label>
+              <select id="city-sel"></select>
+            </div>
+            <div class="field">
+              <label>Events fired on this device</label>
+              <div class="event-log" id="event-log">—</div>
+            </div>
+          </div>
+        </details>
+
+        <button class="btn secondary mt20" id="logout-btn" style="display:none; color:var(--red-dark);">Log out</button>
+        <div style="height:16px;"></div>
+      </main>
+
+      <nav class="tabbar">
+        <a class="tab" href="../index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22V12h6v10"/></svg>
+          Home
+        </a>
+        <a class="tab" href="../report/index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></svg>
+          Reports
+        </a>
+        <a class="tab" href="../packages/index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg>
+          Packages
+        </a>
+        <a class="tab active" href="index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Account
+        </a>
+      </nav>
+      <div class="home-indicator"></div>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/app.js"></script>
+<script>
+(function () {
+  var persona = Mojaz.persona();
+  var name = Mojaz.LS.get('mojaz_user_name');
+  var uid = Mojaz.userId();
+  var phone = Mojaz.LS.get('mojaz_phone');
+  var profile = document.getElementById('profile-slot');
+
+  if (persona && uid) {
+    var isA = persona === 'A';
+    profile.innerHTML =
+      '<div class="card"><div style="display:flex; align-items:center; gap:14px;">' +
+      '<div style="width:54px; height:54px; border-radius:16px; background:var(--red-tint); color:var(--red-dark); display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800;">' +
+      (name ? name[0].toUpperCase() : '?') + '</div>' +
+      '<div style="flex:1;"><div style="font-size:16px; font-weight:800;">' + name + '</div>' +
+      '<div class="small muted">' + (phone || '') + '</div></div>' +
+      '<span class="chip ' + (isA ? 'teal' : 'red') + '">' + (isA ? 'Returning Report Buyer' : 'First-Time Report Buyer') + '</span>' +
+      '</div>' +
+      '<div class="divider"></div>' +
+      '<div class="small muted">Amplitude User ID</div>' +
+      '<div class="mono" style="margin-top:3px; font-weight:600;">' + uid + '</div></div>';
+    document.getElementById('logout-btn').style.display = 'flex';
+  } else {
+    profile.innerHTML =
+      '<div class="card center" style="padding:26px 20px;">' +
+      '<div style="font-size:15px; font-weight:800;">You\'re not signed in</div>' +
+      '<div class="small muted mt8">Sign in to buy and view Mojaz reports</div>' +
+      '<button class="btn mt14" onclick="Mojaz.go(\'../auth/index.html\')">Sign in / Create account</button></div>';
+  }
+
+  // garage
+  var garage = Mojaz.LS.getJSON('mojaz_garage', []);
+  var gslot = document.getElementById('garage-slot');
+  if (garage.length) {
+    gslot.innerHTML = '<div class="card" style="padding:6px 16px;">' +
+      garage.map(function (g) {
+        return '<div class="row"><div style="font-size:26px; line-height:1;">' + g.emoji + '</div>' +
+          '<div class="row-body"><div class="row-title">' + g.make + ' ' + g.model + ' · ' + g.year + '</div>' +
+          '<div class="row-sub mono">' + g.vin + '</div></div></div>';
+      }).join('') + '</div>';
+  } else {
+    gslot.innerHTML = '<div class="card small muted center">No saved vehicles yet — save one from a vehicle summary.</div>';
+  }
+
+  // SDK status line (Analytics / Session Replay / Experiment / Guides & Surveys)
+  function paintStatus() {
+    var s = Mojaz.sdkStatus ? Mojaz.sdkStatus() : { analytics: false, sessionReplay: false, experiment: false, engagement: false };
+    function set(id, ok, extra) {
+      var el = document.getElementById(id);
+      el.textContent = ok ? ('Loaded' + (extra || '')) : 'Missing';
+      el.className = ok ? 'status-ok' : 'status-bad';
+    }
+    set('st-analytics', s.analytics);
+    set('st-sr', s.sessionReplay);
+    set('st-exp', s.experiment, s.experimentWhere ? ' · ' + s.experimentWhere : '');
+    set('st-eng', s.engagement);
+  }
+  paintStatus();
+  setTimeout(paintStatus, 3500); // re-check after remote-config-driven modules settle
+
+  // demo settings — platform / geo (hidden toggle per build spec)
+  var seg = document.getElementById('platform-seg');
+  function paintPlatform() {
+    var cur = Mojaz.LS.get('mojaz_platform') || 'iOS';
+    seg.querySelectorAll('button').forEach(function (b) {
+      b.classList.toggle('active', b.getAttribute('data-platform') === cur);
+    });
+  }
+  seg.addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b) return;
+    Mojaz.LS.set('mojaz_platform', b.getAttribute('data-platform'));
+    paintPlatform();
+    Mojaz.toast('Events now send platform: ' + b.getAttribute('data-platform'));
+  });
+  paintPlatform();
+
+  var sel = document.getElementById('city-sel');
+  Object.keys(Mojaz.KSA_CITIES).forEach(function (city) {
+    var opt = document.createElement('option');
+    opt.value = city;
+    opt.textContent = city + ' — ' + Mojaz.KSA_CITIES[city];
+    sel.appendChild(opt);
+  });
+  sel.value = Mojaz.LS.get('mojaz_city') || 'Riyadh';
+  sel.addEventListener('change', function () {
+    Mojaz.LS.set('mojaz_city', sel.value);
+    Mojaz.LS.set('mojaz_region', Mojaz.KSA_CITIES[sel.value]);
+    Mojaz.toast('Events now send ' + sel.value + ', ' + Mojaz.KSA_CITIES[sel.value]);
+  });
+
+  // fired-events log
+  var log = Mojaz.LS.getJSON('mojaz_event_log', []);
+  document.getElementById('event-log').innerHTML = log.length
+    ? log.slice().reverse().map(function (e) {
+        return e.name + ' <span style="color:var(--faint)">· ' + e.at.replace('T', ' ').slice(5, 19) + '</span>';
+      }).join('<br/>')
+    : 'No events fired yet on this device.';
+
+  document.getElementById('logout-btn').addEventListener('click', function () {
+    Mojaz.logout(); // amplitude.reset() + clears persona state
+  });
+})();
+</script>
+</body>
+</html>
