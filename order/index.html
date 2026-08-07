@@ -128,13 +128,20 @@
 
   // leaving = Report Order Abandoned, and the flow ends
   function abandon(dest) {
-    Mojaz.track('Report Order Abandoned', {
-      report_sku: order.sku,
-      report_type: order.type,
-      report_price: order.price,
-      order_value: order.order_value,
-      total_payable: order.total_payable
-    });
+    var proceeding = false;
+    try {
+      proceeding = sessionStorage.getItem('proceeding_to_payment') === '1';
+      sessionStorage.removeItem('proceeding_to_payment'); // one-shot: consume on read
+    } catch (e) {}
+    if (!proceeding) {
+      Mojaz.track('Report Order Abandoned', {
+        report_sku: order.sku,
+        report_type: order.type,
+        report_price: order.price,
+        order_value: order.order_value,
+        total_payable: order.total_payable
+      });
+    }
     Mojaz.LS.del('mojaz_order');
     Mojaz.flushGo(dest);
   }

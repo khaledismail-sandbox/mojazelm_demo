@@ -45,7 +45,7 @@
         </div>
 
         <div class="section-title"><h2>Payment method</h2><span class="ar-hint">طريقة الدفع</span></div>
-        <div class="option-row pay-method selected">
+        <div class="option-row pay-method selected" data-method="mada">
           <div class="radio-dot"></div>
           <div class="opt-body">
             <div class="opt-title">mada · •••• 4321</div>
@@ -53,7 +53,7 @@
           </div>
           <span style="font-weight:800; color:#0B6B4F; font-size:13px; flex:none;">mada</span>
         </div>
-        <div class="option-row pay-method">
+        <div class="option-row pay-method" data-method="apple_pay">
           <div class="radio-dot"></div>
           <div class="opt-body">
             <div class="opt-title">Apple Pay</div>
@@ -61,7 +61,7 @@
           </div>
           <span style="font-weight:700; font-size:15px; flex:none;"> Pay</span>
         </div>
-        <div class="option-row pay-method">
+        <div class="option-row pay-method" data-method="tabby">
           <div class="radio-dot"></div>
           <div class="opt-body">
             <div class="opt-title">Tabby · 4 payments</div>
@@ -123,6 +123,14 @@
   if (!Mojaz.persona()) { Mojaz.go('../auth/index.html'); return; }
   if (!Mojaz.isPersonaA()) { Mojaz.go('../order/index.html'); return; }
 
+  // arrived — the order→payment transition is complete, clear the abandon guard
+  try { sessionStorage.removeItem('proceeding_to_payment'); } catch (e) {}
+
+  function selectedMethod() {
+    var row = document.querySelector('.pay-method.selected');
+    return (row && row.getAttribute('data-method')) || 'mada';
+  }
+
   document.getElementById('veh-emoji').textContent = veh.emoji;
   document.getElementById('veh-title').textContent = veh.make + ' ' + veh.model + ' · ' + veh.year;
   document.getElementById('veh-vin').textContent = vin;
@@ -146,8 +154,9 @@
   }
   renderTotals();
 
-  // Funnel step 4 — payment sheet opened
+  // Funnel step 4 — payment sheet opened (fires exactly once per load)
   Mojaz.track('Payment Started', {
+    payment_method: selectedMethod(),
     report_sku: order.sku,
     report_type: order.type,
     report_price: order.price,

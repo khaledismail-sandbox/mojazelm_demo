@@ -206,6 +206,29 @@
      ordering and logout keep working even if the Amplitude CDN
      script is blocked (Mojaz.track / flushGo resolve at call time).
      ============================================================ */
+  // Persona identity — sent at auth AND re-asserted on every page load, so the
+  // utm trio / buyer props survive even if remote-config attribution tries to
+  // unset them (observed 2026-08-07: web attribution enabled via remote config).
+  function sendPersonaIdentify(isA) {
+    if (!(window.amplitude && amplitude.Identify)) return;
+    var id = new amplitude.Identify()
+      .set('has_purchased_before', isA)
+      .set('buyer_tier', isA ? 'frequent_buyer' : 'first_time_buyer')
+      .set('account_age_days', isA ? 180 : 0)
+      .set('device_type', 'mobile')
+      .set('utm_medium', isA ? 'direct' : 'social')
+      .set('utm_source', isA ? 'direct' : 'snapchat')
+      .set('utm_campaign', isA ? 'always_on_brand' : 'eid_trade_in_2026')
+      .set('attribution_source', 'AppsFlyer');
+    // scrub attribution's "initial_*: EMPTY" pollution off the profile
+    ['initial_utm_source', 'initial_utm_medium', 'initial_utm_campaign', 'initial_utm_term',
+     'initial_utm_content', 'initial_utm_id', 'initial_referrer', 'initial_referring_domain',
+     'initial_gclid', 'initial_gbraid', 'initial_wbraid', 'initial_fbclid', 'initial_dclid',
+     'initial_ttclid', 'initial_twclid', 'initial_rdt_cid', 'initial_msclkid',
+     'initial_li_fat_id', 'initial_ko_click_id'].forEach(function (k) { id.unset(k); });
+    amplitude.identify(id);
+  }
+
   Mojaz.completeAuth = function (mode, name, demoNumber, phone) {
     var isA = mode === 'login'; // login → Persona A (Returning), signup → Persona B (First-Time)
     var uid = generateUserId(name, demoNumber);
@@ -219,6 +242,8 @@
       ['mojaz_order', 'mojaz_orders', 'mojaz_garage', 'mojaz_vin',
        'mojaz_vehicle', 'mojaz_search_query'].forEach(LS.del);
     }
+    // a stale payment-transition flag must never cross an identity switch
+    try { sessionStorage.removeItem('proceeding_to_payment'); } catch (e) {}
 
     LS.set('mojaz_persona', isA ? 'A' : 'B');
     LS.set('mojaz_user_id', uid);
@@ -228,16 +253,7 @@
 
     if (window.amplitude && amplitude.setUserId) {
       amplitude.setUserId(uid);
-      var id = new amplitude.Identify()
-        .set('has_purchased_before', isA)
-        .set('buyer_tier', isA ? 'frequent_buyer' : 'first_time_buyer')
-        .set('account_age_days', isA ? 180 : 0)
-        .set('device_type', 'mobile')
-        .set('utm_medium', isA ? 'direct' : 'social')
-        .set('utm_source', isA ? 'direct' : 'snapchat')
-        .set('utm_campaign', isA ? 'always_on_brand' : 'eid_trade_in_2026')
-        .set('attribution_source', 'AppsFlyer');
-      amplitude.identify(id);
+      sendPersonaIdentify(isA);
     }
 
     Mojaz.track(isA ? 'Logged In' : 'Account Created', {
@@ -252,6 +268,7 @@
 
   Mojaz.logout = function () {
     try { if (window.amplitude && amplitude.reset) amplitude.reset(); } catch (e) {}
+    try { sessionStorage.removeItem('proceeding_to_payment'); } catch (e) {}
     ['mojaz_persona', 'mojaz_user_id', 'mojaz_user_name', 'mojaz_demo_number',
      'mojaz_phone', 'mojaz_vin', 'mojaz_vehicle', 'mojaz_search_query',
      'mojaz_order', 'mojaz_orders', 'mojaz_garage', 'mojaz_return_to',
@@ -263,7 +280,9 @@
   // Fires "Report Order Started" and routes by persona:
   //   Persona A (Returning) → /payment/  — never sees the disclaimer
   //   Persona B (First-Time) → /order/   — ALWAYS gets the pay-blind interstitial
+  var orderInFlight = false; // one-shot latch: double-taps must not double-fire the funnel
   Mojaz.startReportOrder = function (sku) {
+    if (orderInFlight) return;
     if (!persona()) {
       LS.set('mojaz_return_to', window.location.pathname.indexOf('/vehicle/') !== -1
         ? '../vehicle/index.html' : ROOT + 'index.html');
@@ -276,6 +295,7 @@
       setTimeout(function () { Mojaz.go(ROOT + 'search/index.html'); }, 900);
       return;
     }
+    orderInFlight = true; // released by the page unload that follows
     var order = buildOrder(sku, null);
     LS.setJSON('mojaz_order', order);
     Mojaz.track('Report Order Started', {
@@ -285,6 +305,10 @@
       order_value: order.order_value,
       vehicle_vin: vin
     });
+    if (isPersonaA()) {
+      // guard: /order/ must never count this transition as an abandon
+      try { sessionStorage.setItem('proceeding_to_payment', '1'); } catch (e) {}
+    }
     Mojaz.flushGo(isPersonaA() ? ROOT + 'payment/index.html' : ROOT + 'order/index.html');
   };
 
@@ -329,12 +353,41 @@
     engagementAdded = true;
   }
 
+  // Taxonomy is explicit-only: remote config must not be able to smuggle
+  // autocapture events in past `autocapture: false` (fetchRemoteConfig can
+  // re-enable them project-side; observed 2026-08-07).
+  var IMPLICIT_EVENTS = [
+    '[Amplitude] Page Viewed', '[Amplitude] Form Started', '[Amplitude] Form Submitted',
+    '[Amplitude] File Downloaded', '[Amplitude] Element Clicked', '[Amplitude] Element Changed',
+    'session_start', 'session_end'
+  ];
+
   // Platform override — this phone-frame app simulates the MOBILE app.
   // Every event must carry platform "iOS" or "Android", NEVER "Web".
   amplitude.add({
     name: 'mojaz-context',
     type: 'enrichment',
     execute: async function (event) {
+      if (IMPLICIT_EVENTS.indexOf(event.event_type) !== -1) return null;
+      // web-attribution identifies must not unset the utm trio or write initial_* noise
+      if (event.event_type === '$identify' && event.user_properties) {
+        var up = event.user_properties;
+        if (up.$unset) {
+          delete up.$unset.utm_source;
+          delete up.$unset.utm_medium;
+          delete up.$unset.utm_campaign;
+          if (Object.keys(up.$unset).length === 0) delete up.$unset;
+        }
+        ['$set', '$setOnce'].forEach(function (op) {
+          if (up[op]) {
+            Object.keys(up[op]).forEach(function (k) {
+              if (k.indexOf('initial_') === 0) delete up[op][k];
+            });
+            if (Object.keys(up[op]).length === 0) delete up[op];
+          }
+        });
+        if (Object.keys(up).length === 0) return null;
+      }
       event.platform = LS.get('mojaz_platform') || 'iOS';
       event.country = 'Saudi Arabia';
       event.city = LS.get('mojaz_city') || 'Riyadh';
@@ -355,6 +408,9 @@
   if (storedUid && amplitude.getUserId && amplitude.getUserId() !== storedUid) {
     amplitude.setUserId(storedUid);
   }
+  // Re-assert persona traits each page load so profiles stay complete even if
+  // remote-config attribution fired an unset between events.
+  if (persona()) sendPersonaIdentify(isPersonaA());
 
   /* ---------- Experiment SDK presence check (mandatory) ---------- */
   function experimentProbe() {
