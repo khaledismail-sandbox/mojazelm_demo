@@ -107,6 +107,22 @@
     fee_waived: order.fee_waived
   });
 
+  // Funnel drop relocated (data-model change): Persona B now enters the payment
+  // stage ON THIS SCREEN ~2s after the disclaimer, so the scripted abandonment
+  // happens between "Payment Started" and "Report Purchased".
+  var paymentStartedFired = false;
+  function firePaymentStarted() {
+    if (paymentStartedFired) return;
+    paymentStartedFired = true;
+    Mojaz.track('Payment Started', {
+      report_sku: order.sku,
+      total_payable: order.total_payable,
+      has_purchased_before: false,
+      fee_waived: order.fee_waived
+    });
+  }
+  var paymentStartedTimer = setTimeout(firePaymentStarted, 2000);
+
   // CTA deterministically stalls (~6s): spinner → "still checking…" → timeout. Never proceeds.
   var payBtn = document.getElementById('pay-btn');
   var payLabel = document.getElementById('pay-label');
@@ -128,12 +144,15 @@
 
   // leaving = Report Order Abandoned, and the flow ends
   function abandon(dest) {
+    clearTimeout(paymentStartedTimer);
     var proceeding = false;
     try {
       proceeding = sessionStorage.getItem('proceeding_to_payment') === '1';
       sessionStorage.removeItem('proceeding_to_payment'); // one-shot: consume on read
     } catch (e) {}
     if (!proceeding) {
+      // sequence is guaranteed even on a fast exit: Payment Started, then Abandoned
+      firePaymentStarted();
       Mojaz.track('Report Order Abandoned', {
         report_sku: order.sku,
         report_type: order.type,
