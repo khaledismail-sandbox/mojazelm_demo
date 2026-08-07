@@ -13,7 +13,7 @@
 (function () {
   'use strict';
 
-  var AMP_KEY = 'ee599b7fa09aa4b2ec6c88a9013de64e';
+  var AMP_KEY = '6cdc9a0a81b39d959b4ccb495f247939';
   var PAGE = document.body.getAttribute('data-page') || 'home';
   var ROOT = document.body.getAttribute('data-root') || './';
   var SILENT = document.body.getAttribute('data-silent') === 'true';
